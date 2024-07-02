@@ -36,12 +36,7 @@ public class DipendenteService {
 
     public Dipendente saveDipendente(DipendenteDTO dipendenteDTO) {
         if (dipendenteRepository.findByEmail(dipendenteDTO.email()).isEmpty()) {
-            Dipendente dipendente = new Dipendente();
-            dipendente.setUsername(dipendenteDTO.username());
-            dipendente.setNome(dipendenteDTO.nome());
-            dipendente.setCognome(dipendenteDTO.cognome());
-            dipendente.setEmail(dipendenteDTO.email());
-            dipendente.setPassword(dipendenteDTO.password());
+            Dipendente dipendente = new Dipendente(dipendenteDTO.username(), dipendenteDTO.nome(), dipendenteDTO.cognome(), dipendenteDTO.email(), dipendenteDTO.password());
             dipendente.setAvatar("https://ui-avatars.com/api/?name=" + dipendente.getNome() + "+" + dipendente.getCognome());
             return dipendenteRepository.save(dipendente);
         } else {

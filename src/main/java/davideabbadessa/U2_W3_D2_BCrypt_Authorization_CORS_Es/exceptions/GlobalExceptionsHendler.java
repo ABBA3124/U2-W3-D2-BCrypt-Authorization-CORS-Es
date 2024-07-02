@@ -3,6 +3,7 @@ package davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.exceptions;
 
 import davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.payloads.ErroriDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,4 +46,11 @@ public class GlobalExceptionsHendler {
         return new ErroriDTO(errore.getMessage(), LocalDateTime.now());
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroriDTO handleForbidden(AuthorizationDeniedException ex) {
+        return new ErroriDTO("Non hai accesso a questa funzionalità", LocalDateTime.now());
+    }
+
+    
 }

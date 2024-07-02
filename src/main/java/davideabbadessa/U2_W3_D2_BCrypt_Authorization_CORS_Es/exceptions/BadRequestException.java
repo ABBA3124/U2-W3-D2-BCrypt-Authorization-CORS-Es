@@ -15,7 +15,7 @@ public class BadRequestException extends RuntimeException {
     }
 
     public BadRequestException(List<ObjectError> errorsList) {
-        super("Errori nel body");
+        super("Ci sono stati errori di validazione del payload");
         this.errorsList = errorsList;
     }
 
