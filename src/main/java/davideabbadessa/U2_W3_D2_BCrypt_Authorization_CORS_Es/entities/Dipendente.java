@@ -1,6 +1,7 @@
 package davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Data
 @ToString
 @NoArgsConstructor
-//@JsonIgnoreProperties({"password"})
+@JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 public class Dipendente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

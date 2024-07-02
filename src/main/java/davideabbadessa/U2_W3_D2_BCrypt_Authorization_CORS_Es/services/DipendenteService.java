@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,9 @@ public class DipendenteService {
     @Autowired
     private Cloudinary cloudinary;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<Dipendente> getAllDipendenti() {
         return dipendenteRepository.findAll();
     }
@@ -46,7 +50,7 @@ public class DipendenteService {
 
     public Dipendente saveDipendente(DipendenteDTO dipendenteDTO) {
         if (dipendenteRepository.findByEmail(dipendenteDTO.email()).isEmpty()) {
-            Dipendente dipendente = new Dipendente(dipendenteDTO.username(), dipendenteDTO.nome(), dipendenteDTO.cognome(), dipendenteDTO.email(), dipendenteDTO.password());
+            Dipendente dipendente = new Dipendente(dipendenteDTO.username(), dipendenteDTO.nome(), dipendenteDTO.cognome(), dipendenteDTO.email(), passwordEncoder.encode(dipendenteDTO.password()));
             dipendente.setAvatar("https://ui-avatars.com/api/?name=" + dipendente.getNome() + "+" + dipendente.getCognome());
             return dipendenteRepository.save(dipendente);
         } else {
