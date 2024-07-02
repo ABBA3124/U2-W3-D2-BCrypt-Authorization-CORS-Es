@@ -9,6 +9,10 @@ import davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.exceptions.NotFound
 import davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.payloads.DipendenteDTO;
 import davideabbadessa.U2_W3_D2_BCrypt_Authorization_CORS_Es.repositories.DipendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +34,12 @@ public class DipendenteService {
         return dipendenteRepository.findAll();
     }
 
+    public Page<Dipendente> getDipendenti(int pageNumber, int pageSize, String sortBy) {
+        if (pageSize > 100) pageSize = 100;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return dipendenteRepository.findAll(pageable);
+    }
+
     public Dipendente getDipendenteById(UUID id) {
         return dipendenteRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
@@ -48,12 +58,14 @@ public class DipendenteService {
         dipendenteRepository.deleteById(id);
     }
 
-    public Dipendente updateDipendente(UUID id, DipendenteDTO dipendenteDTO) {
+    public Dipendente findByIdAndUpdateDipendente(UUID id, DipendenteDTO dipendenteDTO) {
         Dipendente dipendente = this.getDipendenteById(id);
         dipendente.setUsername(dipendenteDTO.username());
         dipendente.setNome(dipendenteDTO.nome());
         dipendente.setCognome(dipendenteDTO.cognome());
         dipendente.setEmail(dipendenteDTO.email());
+        dipendente.setPassword(dipendenteDTO.password());
+        dipendente.setAvatar("https://ui-avatars.com/api/?name=" + dipendenteDTO.nome() + "+" + dipendenteDTO.cognome());
         return dipendenteRepository.save(dipendente);
     }
 
@@ -66,6 +78,12 @@ public class DipendenteService {
 
         return dipendenteRepository.save(dipendente);
     }
+
+    public void findByIdAndDelete(UUID userId) {
+        Dipendente found = this.getDipendenteById(userId);
+        this.dipendenteRepository.delete(found);
+    }
+
 
     public Dipendente findByEmail(String email) {
         return dipendenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Dipendente con email " + email + "non trovato!"));
